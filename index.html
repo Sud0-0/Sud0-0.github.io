@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0f1615">
+<title>Marcos Membreño</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una columna estrecha de lectura; cada sección con su etiqueta a la izquierda en escritorio y arriba en móvil */
+:root {
+  --bg: #f6f7f5;
+  --surface: #ffffff;
+  --fg: #16201f;
+  --muted: #5c6967;
+  --line: #d9dfdc;
+  --accent: #0f6e68;      /* verde agua de laguna */
+  --accent-soft: #dcefeb;
+  --warm: #c2551f;        /* tierra volcánica, solo para marcas de "pendiente" */
+  --warm-soft: #fbe8dc;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1615; --surface: #16201f; --fg: #e8eeec; --muted: #9aa8a5; --line: #2a3634;
+    --accent: #5cc3b8; --accent-soft: #173431; --warm: #f0915e; --warm-soft: #3a2418; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1615; --surface: #16201f; --fg: #e8eeec; --muted: #9aa8a5; --line: #2a3634;
+  --accent: #5cc3b8; --accent-soft: #173431; --warm: #f0915e; --warm-soft: #3a2418; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@keyframes rayas { to { background-position: 28.28px 0, 0 0; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero .reveal, .photo, .role .caret { animation: none; }
+  .btn { transition: none; }
+}
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--body); font-size: 1.0625rem; line-height: 1.6;
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 60rem; margin: 0 auto; padding-inline: 1.25rem; }
+
+/* Marca de dato pendiente */
+.tbd {
+  background: var(--warm-soft); color: var(--warm);
+  border-bottom: 1.5px dashed var(--warm); padding: 0 .2em; border-radius: 2px;
+}
+
+/* Navegación */
+nav.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+}
+nav.top .wrap { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; padding-block: .75rem; flex-wrap: wrap; }
+.mark { font-family: var(--display); font-weight: 800; font-size: 1.15rem; text-decoration: none; color: var(--fg); letter-spacing: -.01em; }
+.mark span { color: var(--accent); }
+nav.top ul { list-style: none; display: flex; gap: 1.25rem; margin: 0; padding: 0; flex-wrap: wrap; }
+nav.top ul a { color: var(--muted); text-decoration: none; font-size: .95rem; font-weight: 500; }
+nav.top ul a:hover { color: var(--fg); }
+
+/* Portada */
+.hero { padding-block: 3rem 2.75rem; display: grid; grid-template-columns: 1fr auto; gap: 2.5rem; align-items: center; }
+.hero > div { min-width: 0; }
+.eyebrow { font-family: var(--mono); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 1rem; }
+.hero h1 {
+  font-family: var(--display); font-weight: 800; font-size: clamp(2rem, 4.4vw, 3.1rem);
+  line-height: 1.02; letter-spacing: -.03em; margin: 0 0 .6rem; text-wrap: balance;
+}
+.role {
+  font-family: var(--display); font-weight: 700; font-size: clamp(1.25rem, 2.6vw, 1.75rem);
+  color: var(--accent); letter-spacing: -.015em; line-height: 1.2; margin: 0 0 1.1rem; min-height: 1.2em;
+}
+.role .caret { display: inline-block; width: .09em; height: 1em; margin-left: .08em; vertical-align: -.12em; background: var(--accent); animation: parpadeo 1s steps(1) infinite; }
+@keyframes parpadeo { 50% { opacity: 0; } }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hero p.lead { font-size: 1.08rem; color: var(--muted); max-width: 40ch; margin: 0 0 1.5rem; }
+.hero .reveal { animation: subir .6s cubic-bezier(.2,.7,.2,1) both; }
+.hero .reveal:nth-child(2) { animation-delay: .08s; }
+.hero .reveal:nth-child(3) { animation-delay: .16s; }
+.hero .reveal:nth-child(4) { animation-delay: .24s; }
+.hero .reveal:nth-child(5) { animation-delay: .32s; }
+@keyframes subir { from { opacity: 0; transform: translateY(12px); } }
+.cta { display: flex; gap: .75rem; flex-wrap: wrap; }
+.btn {
+  display: inline-block; padding: .6rem 1.1rem; border-radius: 999px; font-weight: 600;
+  text-decoration: none; border: 1.5px solid var(--accent); font-size: .95rem;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px -8px var(--accent); }
+.btn.primary { background: var(--accent); color: var(--bg); }
+.btn.ghost { color: var(--accent); }
+.photo {
+  width: 10.5rem; max-width: 100%; aspect-ratio: 4/5; border-radius: 1.25rem;
+  animation: rayas 6s linear infinite;
+  background:
+    repeating-linear-gradient(135deg, var(--accent-soft) 0 10px, transparent 10px 20px) 0 0 / 28.28px 28.28px,
+    var(--surface);
+  border: 1.5px dashed var(--accent);
+  display: grid; place-items: center; text-align: center; color: var(--accent);
+  font-family: var(--mono); font-size: .8rem; padding: 1rem;
+}
+
+/* Secciones */
+section.block { border-top: 1px solid var(--line); padding-block: 3.5rem; display: grid; grid-template-columns: 11rem 1fr; gap: 2rem; }
+section.block > * { min-width: 0; }
+.label { font-family: var(--mono); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); padding-top: .4rem; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-spacing: -.02em; line-height: 1.15; margin: 0 0 1.25rem; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 700; font-size: 1.2rem; margin: 0; letter-spacing: -.01em; }
+.prose p { max-width: 62ch; margin: 0 0 1rem; }
+
+.skills { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.5rem; padding: 0; list-style: none; }
+.skills li { font-size: .9rem; padding: .3rem .8rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+
+/* Línea de tiempo: el orden cronológico es información real */
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 2rem; }
+.timeline > li { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1.25rem; }
+.timeline > li > div { min-width: 0; }
+.when { font-family: var(--mono); font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: .2rem; }
+.where { color: var(--muted); font-size: .95rem; margin: .15rem 0 .5rem; }
+.timeline p { margin: 0; max-width: 60ch; }
+.subhead { font-family: var(--mono); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 2.75rem 0 1.25rem; }
+.cv-link { margin-top: 2rem; }
+.duties { list-style: disc; margin: .4rem 0 0; padding-left: 1.1rem; color: var(--muted); font-size: .95rem; display: grid; gap: .15rem; }
+
+/* Proyectos */
+.projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.project { background: var(--surface); border: 1px solid var(--line); border-radius: .9rem; padding: 1.4rem; display: flex; flex-direction: column; gap: .6rem; }
+.project .thumb { aspect-ratio: 16/9; max-width: 100%; border-radius: .5rem; background: repeating-linear-gradient(135deg, var(--accent-soft) 0 8px, transparent 8px 16px); border: 1px dashed var(--line); display: grid; place-items: center; font-family: var(--mono); font-size: .75rem; color: var(--muted); }
+.project p { margin: 0; color: var(--muted); font-size: .98rem; }
+.tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: auto; padding-top: .4rem; }
+.tags span { font-family: var(--mono); font-size: .72rem; color: var(--accent); background: var(--accent-soft); padding: .15rem .5rem; border-radius: 4px; }
+.duties.dos-col { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; }
+@media (max-width: 720px) { .duties.dos-col { grid-template-columns: 1fr; } }
+.project details.mas summary { cursor: pointer; width: fit-content; font-weight: 600; font-size: .92rem; color: var(--accent); list-style: none; }
+.project details.mas summary::-webkit-details-marker { display: none; }
+.project details.mas summary::after { content: " ▾"; display: inline-block; transition: transform .2s ease; }
+.project details.mas[open] summary::after { transform: rotate(180deg); }
+.project details.mas[open] summary { margin-bottom: .2rem; }
+.project.destacado { grid-column: 1 / -1; }
+.project .badge { margin: 0; font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--warm); }
+.project .badge.publico { color: var(--accent); }
+.nota-proyectos { color: var(--muted); max-width: 62ch; margin: -.5rem 0 1.5rem; font-size: .95rem; }
+.project a.more { font-weight: 600; font-size: .95rem; }
+
+/* Contacto */
+.contact { display: grid; gap: .75rem; margin: 0; }
+.contact div { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; align-items: baseline; padding-bottom: .75rem; border-bottom: 1px solid var(--line); }
+.contact dt { font-family: var(--mono); font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.contact dd { margin: 0; overflow-wrap: anywhere; user-select: all; }
+
+footer { border-top: 1px solid var(--line); padding-block: 2rem; color: var(--muted); font-size: .9rem; }
+
+@media (max-width: 720px) {
+  .hero { grid-template-columns: 1fr; padding-block: 2rem 2rem; gap: 1.5rem; }
+  .photo { width: 8rem; order: -1; padding: .5rem; font-size: .72rem; }
+  section.block { grid-template-columns: 1fr; gap: .75rem; padding-block: 2.75rem; }
+  .projects { grid-template-columns: 1fr; }
+  .timeline > li { grid-template-columns: 1fr; gap: .25rem; }
+  .contact div { grid-template-columns: 1fr; gap: .2rem; }
+}
+.cert { margin: .35rem 0 0; }
+.cert a { font-weight: 600; font-size: .95rem; }
+dialog.visor { border: 0; padding: 0; background: transparent; max-width: min(64rem, calc(100vw - 2rem)); width: 100%; }
+dialog.visor::backdrop { background: rgba(8, 12, 12, .82); }
+.visor figure { margin: 0; display: grid; gap: .75rem; }
+.visor .bar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: #f2f5f4; }
+.visor .bar span { font-family: var(--display); font-weight: 700; font-size: 1.05rem; min-width: 0; }
+.visor button { flex: none; font: 600 .95rem var(--body); color: #f2f5f4; background: transparent; border: 1.5px solid #f2f5f4; border-radius: 999px; padding: .45rem 1rem; cursor: pointer; }
+.visor img { width: 100%; height: auto; max-height: calc(100vh - 7rem); object-fit: contain; border-radius: .5rem; background: #fff; }
+
+/* Dinamismo: barra de progreso, enlace activo, aparición al bajar, tarjetas con relieve */
+.progreso { position: fixed; top: 0; left: 0; height: 3px; width: 100%; transform: scaleX(0); transform-origin: 0 50%; background: linear-gradient(90deg, var(--accent), var(--warm)); z-index: 10; pointer-events: none; }
+nav.top ul a { position: relative; transition: color .2s ease; }
+nav.top ul a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 2px; background: var(--accent); border-radius: 2px; transform: scaleX(0); transition: transform .25s ease; }
+nav.top ul a:hover::after, nav.top ul a.activo::after { transform: scaleX(1); }
+nav.top ul a.activo { color: var(--fg); }
+html, body { overflow-x: clip; }
+.hero { position: relative; isolation: isolate; }
+.hero::before { content: none; }
+@keyframes deriva { to { transform: translate(-4rem, 3rem) scale(1.15); } }
+.revela { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+.revela.visible { opacity: 1; transform: none; }
+.project { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+.project.revela { transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1), border-color .25s ease, box-shadow .25s ease; }
+.project:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); box-shadow: 0 14px 30px -18px color-mix(in srgb, var(--accent) 70%, transparent); }
+.skills li { transition: border-color .2s ease, color .2s ease, transform .2s ease; }
+.skills li:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+.timeline > li { position: relative; }
+.timeline > li::before { content: ""; position: absolute; left: -1.1rem; top: .55rem; width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+.contact div { transition: padding-left .2s ease; }
+.contact div:hover { padding-left: .4rem; }
+@media (max-width: 720px) { .timeline > li::before { display: none; } .hero::before { width: 16rem; height: 16rem; right: -5rem; } }
+@media (prefers-reduced-motion: reduce) {
+  .hero::before { animation: none; }
+  .revela { opacity: 1; transform: none; transition: none; }
+  .project, .project:hover, .skills li:hover { transition: none; transform: none; }
+}
+
+/* Íconos de tecnologías y plataformas (Simple Icons, coloreados con máscara) */
+.ico { display: inline-flex; align-items: center; gap: .4em; }
+.ico::before { content: ""; flex: none; width: 1.15em; height: 1.15em; background: var(--c, currentColor); -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; }
+.tags span.ico { padding-left: .45rem; }
+.contact dt .ico::before { width: 1.35em; height: 1.35em; }
+.contact dt .ico { color: var(--muted); }
+.contact dd a { color: var(--fg); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 60%, transparent); transition: color .2s ease, border-color .2s ease; }
+.contact dd a:hover { color: var(--accent); border-color: var(--accent); }
+
+/* Sobre mí: frase resaltada, cifras y habilidades por grupo */
+.resalta { background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 45%, var(--warm))); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cifras { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; margin: 1.75rem 0; }
+.cifras div { background: var(--surface); border: 1px solid var(--line); border-radius: .9rem; padding: 1rem; display: grid; gap: .2rem; transition: transform .25s ease, border-color .25s ease; }
+.cifras div:hover { transform: translateY(-3px); border-color: var(--accent); }
+.cifras strong { font-family: var(--display); font-size: 2rem; line-height: 1; color: var(--accent); }
+.cifras span { font-size: .85rem; color: var(--muted); line-height: 1.3; }
+.grupos-hab { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.grupo { background: var(--surface); border: 1px solid var(--line); border-radius: .9rem; padding: 1rem 1.1rem; }
+.grupo-tit { margin: 0 0 .7rem; font-family: var(--mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--fg); }
+.grupo .skills { margin: 0; gap: .4rem; }
+.grupo .skills li { font-size: .82rem; padding: .25rem .65rem; background: var(--bg); }
+/* Trayectoria: línea vertical, tarjetas y funciones como etiquetas */
+.timeline.exp { position: relative; gap: 1.25rem; }
+.timeline.exp::before { content: ""; position: absolute; left: -.88rem; top: .6rem; bottom: .6rem; width: 2px; background: linear-gradient(var(--accent), var(--line)); border-radius: 2px; }
+.exp-card { background: var(--surface); border: 1px solid var(--line); border-radius: .9rem; padding: 1.1rem 1.25rem; transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+.exp-card:hover { transform: translateX(4px); border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); box-shadow: 0 12px 26px -18px color-mix(in srgb, var(--accent) 70%, transparent); }
+.exp-card .where { display: flex; margin-bottom: .2rem; }
+.exp-card .cert { margin-top: .6rem; }
+.chips { list-style: none; display: flex; flex-wrap: wrap; gap: .4rem; margin: .7rem 0 0; padding: 0; }
+.chips li { font-size: .82rem; color: var(--fg); background: var(--accent-soft); border-radius: 999px; padding: .2rem .65rem; }
+.timeline.exp .when { display: flex; flex-direction: column; align-items: flex-start; gap: .45rem; padding-top: 1.15rem; }
+.actual { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: .1rem .5rem; display: inline-flex; align-items: center; gap: .35rem; }
+.actual::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: var(--accent); animation: latido 1.8s ease-in-out infinite; }
+@keyframes latido { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent); } 50% { box-shadow: 0 0 0 5px transparent; } }
+.timeline.exp > li::before { top: 1.45rem; }
+@media (max-width: 720px) {
+  .cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grupos-hab { grid-template-columns: 1fr; }
+  .timeline.exp::before { display: none; }
+  .timeline.exp .when { flex-direction: row; align-items: center; padding-top: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .actual::before { animation: none; } .exp-card:hover, .cifras div:hover { transform: none; } }
+
+.cert a.perfil { margin-left: 1rem; }
+@media (max-width: 720px) { .cert a.perfil { display: inline-block; margin: .4rem 0 0; } }
+
+/* Encabezado destacado de Estudios */
+.subtitulo { margin: 3.5rem 0 1.5rem; padding-top: 2rem; border-top: 1px solid var(--line); display: grid; gap: .35rem; }
+.subtitulo::after { content: ""; width: 3.5rem; height: 3px; border-radius: 3px; margin-top: .35rem; background: linear-gradient(90deg, var(--accent), var(--warm)); }
+.subtitulo-eti { font-family: var(--mono); font-size: .75rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+
+/* Proyectos: filtros, ícono por proyecto, insignia "en uso" y maqueta del celular */
+.filtros { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.25rem; }
+.filtro { font: 600 .88rem var(--body); color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: .4rem .9rem; cursor: pointer; transition: color .2s ease, border-color .2s ease, background-color .2s ease; }
+.filtro span { font-family: var(--mono); font-size: .75rem; margin-left: .25rem; opacity: .7; }
+.filtro:hover { color: var(--fg); border-color: var(--accent); }
+.filtro.activo { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+.projects .project.oculto { display: none; }
+.project.aparece-filtro { animation: subir .45s cubic-bezier(.2,.7,.2,1) both; }
+.p-top { display: flex; align-items: center; gap: .75rem; }
+.p-ico { flex: none; width: 2.6rem; height: 2.6rem; border-radius: .75rem; background: linear-gradient(135deg, var(--accent-soft), color-mix(in srgb, var(--accent) 25%, var(--surface))); border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line)); position: relative; transition: transform .3s ease; }
+.p-ico::before { content: ""; position: absolute; inset: .62rem; background: var(--accent); -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; }
+.project:hover .p-ico { transform: rotate(-6deg) scale(1.06); }
+.en-uso { display: inline-flex; align-items: center; gap: .35rem; color: var(--accent); margin-right: .6rem; }
+.en-uso::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: var(--accent); animation: latido 1.8s ease-in-out infinite; }
+.project.destacado { display: grid; grid-template-columns: minmax(0, 1fr) 13rem; gap: 1.5rem; align-items: center; background: radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--accent) 12%, var(--surface)), var(--surface) 60%); }
+.p-info { display: flex; flex-direction: column; gap: .6rem; min-width: 0; }
+.p-tel { width: 11rem; margin-inline: auto; aspect-ratio: 9 / 16; border-radius: 1.6rem; border: 2px solid color-mix(in srgb, var(--accent) 45%, var(--line)); background: var(--bg); padding: .7rem .6rem; display: flex; flex-direction: column; gap: .7rem; box-shadow: 0 18px 40px -24px color-mix(in srgb, var(--accent) 80%, transparent); transform: rotate(3deg); transition: transform .4s ease; }
+.project.destacado:hover .p-tel { transform: rotate(0deg) translateY(-4px); }
+.p-tel-barra { width: 2.5rem; height: .3rem; border-radius: 999px; background: var(--line); margin: 0 auto; }
+.p-mods { display: grid; grid-template-columns: 1fr 1fr; gap: .45rem; flex: 1; align-content: start; }
+.p-mods span { display: grid; justify-items: center; gap: .35rem; padding: .65rem .2rem; border-radius: .7rem; background: var(--surface); border: 1px solid var(--line); font-size: .62rem; color: var(--muted); text-align: center; }
+.p-mods span::before { content: ""; width: 1.25rem; height: 1.25rem; background: var(--accent); -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; }
+.p-mods span:nth-child(1) { animation: brillo 4s ease-in-out infinite; }
+.p-mods span:nth-child(2) { animation: brillo 4s ease-in-out 1s infinite; }
+.p-mods span:nth-child(3) { animation: brillo 4s ease-in-out 2s infinite; }
+.p-mods span:nth-child(4) { animation: brillo 4s ease-in-out 3s infinite; }
+@keyframes brillo { 0%, 20%, 100% { border-color: var(--line); } 8% { border-color: var(--accent); color: var(--fg); } }
+@media (max-width: 720px) { .project.destacado { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .en-uso::before, .p-mods span, .project.aparece-filtro { animation: none; } .p-tel, .project.destacado:hover .p-tel { transform: none; } }
+
+/* Maquetas de los demás proyectos */
+.p-chat { gap: .45rem; padding-bottom: .9rem; }
+.p-chat-cab { display: flex; align-items: center; gap: .4rem; font-size: .7rem; font-weight: 600; color: var(--fg); padding-bottom: .4rem; border-bottom: 1px solid var(--line); }
+.p-chat-av { width: 1.1rem; height: 1.1rem; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #25D366); }
+.project .burbuja { margin: 0; font-size: .6rem; line-height: 1.35; padding: .4rem .55rem; border-radius: .7rem; max-width: 85%; color: var(--fg); opacity: 0; animation: burbuja 8s ease infinite; }
+.burbuja.yo { align-self: flex-end; background: color-mix(in srgb, #25D366 30%, var(--surface)); border-bottom-right-radius: .2rem; }
+.burbuja.bot { align-self: flex-start; background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: .2rem; }
+.burbuja:nth-of-type(2) { animation-delay: .8s; }
+.burbuja:nth-of-type(3) { animation-delay: 2.4s; }
+.burbuja:nth-of-type(4) { animation-delay: 3.2s; }
+@keyframes burbuja { 0% { opacity: 0; transform: translateY(6px); } 6%, 85% { opacity: 1; transform: none; } 95%, 100% { opacity: 0; } }
+.escribiendo { display: inline-flex; gap: .2rem; }
+.escribiendo span { width: .3rem; height: .3rem; border-radius: 50%; background: var(--muted); animation: punto 1s ease-in-out infinite; }
+.escribiendo span:nth-child(2) { animation-delay: .15s; }
+.escribiendo span:nth-child(3) { animation-delay: .3s; }
+@keyframes punto { 0%, 100% { transform: translateY(0); opacity: .5; } 50% { transform: translateY(-3px); opacity: 1; } }
+.p-web, .p-term { width: 12.5rem; margin-inline: auto; border-radius: .8rem; border: 2px solid color-mix(in srgb, var(--accent) 45%, var(--line)); background: var(--bg); overflow: hidden; box-shadow: 0 18px 40px -24px color-mix(in srgb, var(--accent) 80%, transparent); transform: rotate(-2deg); transition: transform .4s ease; }
+.project.destacado:hover .p-web, .project.destacado:hover .p-term { transform: rotate(0deg) translateY(-4px); }
+.p-web-barra { display: flex; gap: .3rem; padding: .45rem .55rem; border-bottom: 1px solid var(--line); background: var(--surface); }
+.p-web-barra i { width: .45rem; height: .45rem; border-radius: 50%; background: var(--line); }
+.p-web-barra i:first-child { background: #f0915e; }
+.p-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: .25rem; padding: .6rem; }
+.p-cal b { font: 600 .55rem var(--mono); color: var(--muted); text-align: center; }
+.p-cal span { height: .9rem; border-radius: .2rem; animation: brillo 5s ease-in-out infinite; border: 1px solid transparent; }
+.p-cal .t1 { background: color-mix(in srgb, var(--accent) 55%, var(--surface)); }
+.p-cal .t2 { background: color-mix(in srgb, var(--accent) 30%, var(--surface)); }
+.p-cal .t3 { background: color-mix(in srgb, var(--warm) 45%, var(--surface)); }
+.p-cal .libre { background: repeating-linear-gradient(135deg, var(--line) 0 3px, transparent 3px 6px); }
+.p-cal span:nth-of-type(3n) { animation-delay: 1.2s; }
+.p-cal span:nth-of-type(4n) { animation-delay: 2.4s; }
+.p-term { font-family: var(--mono); }
+.project .p-term-l { margin: .55rem .6rem .2rem; font-size: .6rem; color: var(--accent); }
+.project .p-term-l.meta { text-align: right; color: var(--muted); margin-bottom: .6rem; }
+.carril { margin: .35rem .6rem; height: 1.3rem; border-bottom: 1px dashed var(--line); position: relative; }
+.bus { position: absolute; left: 0; bottom: .15rem; font-size: .5rem; color: var(--bg); background: #f7c948; padding: .15rem .35rem; border-radius: .2rem .5rem .2rem .2rem; white-space: nowrap; animation: carrera 6s ease-in-out infinite; }
+.bus.b2 { background: var(--accent); animation-name: carrera2; }
+@keyframes carrera { 0%, 8% { left: 0; } 45% { left: 30%; } 70% { left: 38%; } 90%, 100% { left: calc(100% - 4.6rem); } }
+@keyframes carrera2 { 0%, 8% { left: 0; } 40% { left: 38%; } 70% { left: 45%; } 92%, 100% { left: calc(100% - 4.9rem); } }
+.p-mini-hero { display: grid; gap: .3rem; padding: .7rem .6rem .5rem; }
+.p-mini-hero span { height: .4rem; border-radius: 999px; background: var(--line); }
+.p-mini-hero .l1 { width: 70%; height: .55rem; background: var(--fg); opacity: .8; }
+.p-mini-hero .l2 { width: 55%; background: var(--accent); animation: brillo 4s ease-in-out infinite; }
+.p-mini-hero .l3 { width: 85%; }
+.p-mini-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem; padding: 0 .6rem .7rem; }
+.p-mini-cards span { height: 2.2rem; border-radius: .35rem; background: var(--surface); border: 1px solid var(--line); animation: brillo 4s ease-in-out infinite; }
+.p-mini-cards span:nth-child(2) { animation-delay: 1.3s; }
+.p-mini-cards span:nth-child(3) { animation-delay: 2.6s; }
+@media (prefers-reduced-motion: reduce) {
+  .project .burbuja { opacity: 1; animation: none; }
+  .escribiendo span, .p-cal span, .bus, .p-mini-hero .l2, .p-mini-cards span { animation: none; }
+  .bus.b2 { left: 1.5rem; }
+  .p-web, .p-term, .project.destacado:hover .p-web, .project.destacado:hover .p-term { transform: none; }
+}
+
+/* Celular: mismas funciones, diseño adaptado */
+@media (max-width: 720px) {
+  nav.top .wrap { justify-content: flex-start; padding-block: .6rem; }
+  nav.top ul { flex-wrap: nowrap; overflow-x: auto; gap: 1.1rem; scrollbar-width: none; width: 100%; }
+  nav.top ul::-webkit-scrollbar { display: none; }
+  nav.top ul a { white-space: nowrap; display: inline-block; padding-block: .35rem; }
+  .project { padding: 1.15rem; }
+  .project.destacado { gap: 1.1rem; }
+  .p-pantalla { order: 2; }
+  .p-tel { width: 9.5rem; transform: none; }
+  .p-web, .p-term { width: 100%; max-width: 17rem; transform: none; }
+  .filtros { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: .2rem; }
+  .filtros::-webkit-scrollbar { display: none; }
+  .filtro { white-space: nowrap; padding: .5rem .95rem; }
+  .project details.mas summary { padding-block: .35rem; }
+  .cert a { display: inline-block; padding-block: .3rem; }
+  .contact dd a { display: inline-block; padding-block: .15rem; }
+  .exp-card { padding: 1rem; }
+  .exp-card:hover { transform: none; }
+  dialog.visor { max-width: calc(100vw - 1rem); }
+}
+/* Pantallas táctiles: el toque activa los efectos que en la computadora da el mouse */
+@media (hover: none) {
+  .project:active, .exp-card:active, .cifras div:active { border-color: var(--accent); }
+  .project:hover { transform: none; }
+}
+
+/* Línea de tiempo visible también en el celular */
+@media (max-width: 720px) {
+  .timeline.exp { padding-left: 1.4rem; }
+  .timeline.exp::before { display: block; left: .45rem; top: .45rem; bottom: .45rem; }
+  .timeline.exp > li::before { display: block; left: calc(-1.2rem + 1px); top: .4rem; }
+}
+
+/* Minijuego: Carrera de buses */
+.jugar-btn { font: 600 .9rem var(--body); color: var(--bg); background: var(--accent); border: 0; border-radius: 999px; padding: .35rem .85rem; cursor: pointer; white-space: nowrap; transition: transform .2s ease, box-shadow .2s ease; animation: invita 3s ease-in-out infinite; }
+.jugar-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px -8px var(--accent); }
+@keyframes invita { 0%, 85%, 100% { transform: none; } 90% { transform: rotate(-4deg); } 95% { transform: rotate(4deg); } }
+dialog.juego { border: 1px solid var(--line); border-radius: 1.1rem; background: var(--surface); color: var(--fg); padding: 0; width: min(36rem, calc(100vw - 1.5rem)); }
+dialog.juego::backdrop { background: rgba(8, 12, 12, .8); }
+.juego-caja { padding: 1.25rem; display: grid; gap: .9rem; }
+.juego-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.juego-cab h2 { margin: 0; font-size: 1.5rem; }
+.juego-eti { margin: 0 0 .2rem; font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.juego-cerrar { background: transparent; border: 1px solid var(--line); color: var(--muted); border-radius: 999px; width: 2.2rem; height: 2.2rem; cursor: pointer; font-size: .95rem; }
+.juego-cerrar:hover { color: var(--fg); border-color: var(--accent); }
+.juego-txt { margin: 0; color: var(--muted); font-size: .95rem; }
+.pista { position: relative; background: var(--bg); border: 1px solid var(--line); border-radius: .8rem; padding: .6rem .6rem .6rem .6rem; display: grid; gap: .5rem; }
+.carril-j { position: relative; height: 2.3rem; border-bottom: 1px dashed var(--line); margin-right: 1.1rem; }
+.bus-j { position: absolute; left: 0; bottom: .3rem; font: 600 .7rem var(--mono); white-space: nowrap; padding: .3rem .55rem; border-radius: .35rem .8rem .35rem .35rem; color: var(--bg); transform: translateX(calc(var(--x, 0) * (100cqw - 100%) / 100)); }
+.carril-j { container-type: inline-size; }
+.bus-j.tuyo { background: #f7c948; }
+.bus-j.rival { background: var(--accent); }
+.meta-j { position: absolute; top: .4rem; bottom: .4rem; right: .6rem; width: .55rem; background: repeating-linear-gradient(var(--fg) 0 .3rem, var(--bg) .3rem .6rem); border-radius: 2px; opacity: .8; }
+.juego-estado { margin: 0; text-align: center; font-family: var(--display); font-weight: 700; font-size: 1.15rem; min-height: 1.5em; }
+.juego-acciones { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+.juego-acciones .btn { cursor: pointer; font-family: var(--body); }
+.acelerar { font: 800 1.05rem var(--display); color: var(--bg); background: linear-gradient(135deg, #f7c948, var(--warm)); border: 0; border-radius: 999px; padding: .75rem 1.6rem; cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none; transition: transform .08s ease; }
+.acelerar:active { transform: scale(.94); }
+.acelerar:disabled { opacity: .4; cursor: not-allowed; }
+.juego-record { margin: 0; text-align: center; color: var(--muted); font-size: .85rem; font-family: var(--mono); min-height: 1.2em; }
+@media (max-width: 720px) {
+  .jugar-btn { padding: .3rem .75rem; font-size: .85rem; }
+  .acelerar { flex: 1 1 100%; padding: 1rem; font-size: 1.15rem; }
+}
+@media (prefers-reduced-motion: reduce) { .jugar-btn { animation: none; } }
+
+/* Buses dibujados (minijuego y maqueta) */
+.svg-bus { display: block; width: 100%; height: auto; overflow: visible; }
+.svg-bus .carroceria { fill: var(--c, #f7c948); }
+.svg-bus .vidrio { fill: #cfe9ff; opacity: .92; }
+.svg-bus .puerta { opacity: .7; }
+.svg-bus .franja { fill: rgba(0, 0, 0, .18); }
+.svg-bus .faro { fill: #fff3b0; }
+.svg-bus .letrero { font: 700 6.5px var(--mono); fill: #0f1615; text-anchor: middle; letter-spacing: .3px; }
+.svg-bus .llanta { fill: #1a1f1f; stroke: #0b0f0f; stroke-width: 1.2; }
+.svg-bus .rin { fill: #9aa8a5; }
+.svg-bus .rayo { stroke: #0b0f0f; stroke-width: 1.2; }
+.svg-bus .rueda { transform-box: fill-box; transform-origin: center; }
+.pista.corriendo .rueda { animation: girar .45s linear infinite; }
+.p-term .rueda { animation: girar .6s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+.bus-j { width: 7.5rem; padding: 0; background: none !important; bottom: .15rem; }
+.bus-j.tuyo { --c: #f7c948; }
+.bus-j.rival { --c: var(--accent); }
+.carril-j { height: 3.2rem; }
+.bus { width: 4.6rem; padding: 0; background: none !important; bottom: .1rem; }
+.bus.b1 { --c: #f7c948; }
+.bus.b2 { --c: var(--accent); }
+.carril { height: 2rem; }
+@media (max-width: 720px) { .bus-j { width: 6.2rem; } }
+@media (prefers-reduced-motion: reduce) { .pista.corriendo .rueda, .p-term .rueda { animation: none; } }
+
+/* Barra superior nueva: menú en cápsula + botón de juego siempre visible */
+nav.top .wrap.barra { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .65rem; flex-wrap: nowrap; }
+nav.top ul.menu { display: flex; gap: .25rem; margin: 0; padding: .3rem; list-style: none; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; flex-wrap: nowrap; overflow: visible; width: auto; }
+nav.top ul.menu a { display: block; padding: .4rem .95rem; border-radius: 999px; color: var(--muted); font-size: .92rem; font-weight: 500; text-decoration: none; transition: color .2s ease, background-color .2s ease; }
+nav.top ul.menu a::after { display: none; }
+nav.top ul.menu a:hover { color: var(--fg); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+nav.top ul.menu a.activo { color: var(--bg); background: var(--accent); }
+.menu-btn { display: none; align-items: center; gap: .5rem; font: 600 .9rem var(--body); color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: .45rem .9rem; cursor: pointer; }
+.menu-ico { display: grid; gap: 3px; width: 1rem; }
+.menu-ico i { display: block; height: 2px; border-radius: 2px; background: currentColor; transition: transform .25s ease, opacity .2s ease; }
+nav.top.abierto .menu-ico i:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+nav.top.abierto .menu-ico i:nth-child(2) { opacity: 0; }
+nav.top.abierto .menu-ico i:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+nav.top .jugar-btn { flex: none; padding: .5rem 1rem; font-size: .9rem; box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent); animation: invita 3s ease-in-out infinite, pulso 2.4s ease-out infinite; }
+@keyframes pulso { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); } 70%, 100% { box-shadow: 0 0 0 10px transparent; } }
+@media (max-width: 720px) {
+  nav.top .wrap.barra { position: relative; padding-block: .55rem; }
+  .menu-btn { display: inline-flex; }
+  nav.top ul.menu { position: absolute; top: calc(100% + .4rem); left: 1.25rem; right: 1.25rem; flex-direction: column; gap: .2rem; padding: .5rem; border-radius: 1rem; box-shadow: 0 18px 40px -20px rgba(0, 0, 0, .8); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .2s ease, transform .2s ease, visibility .2s; }
+  nav.top.abierto ul.menu { opacity: 1; visibility: visible; transform: none; }
+  nav.top ul.menu a { padding: .75rem 1rem; border-radius: .7rem; font-size: 1rem; }
+  nav.top .jugar-btn { padding: .5rem .95rem; font-size: .88rem; }
+}
+@media (prefers-reduced-motion: reduce) { nav.top .jugar-btn { animation: none; } nav.top ul.menu { transition: none; } }
+</style>
+</head>
+<body>
+
+<div class="progreso" aria-hidden="true"></div>
+<nav class="top" aria-label="Principal">
+  <div class="wrap barra">
+    <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu-lista" aria-label="Abrir menú">
+      <span class="menu-ico" aria-hidden="true"><i></i><i></i><i></i></span><span class="menu-txt">Menú</span>
+    </button>
+    <ul class="menu" id="menu-lista">
+      <li><a href="#sobre-mi">Sobre mí</a></li>
+      <li><a href="#experiencia">Experiencia</a></li>
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <button type="button" class="jugar-btn" id="abrir-juego"><span aria-hidden="true">🎮</span> ¿Jugamos?</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <header class="hero" id="inicio">
+    <div>
+      <p class="eyebrow reveal">Masaya, Nicaragua</p>
+      <h1 class="reveal">Hola, soy Marcos.</h1>
+      <p class="role reveal"><span class="sr-only">Gerente de tienda, estudiante de Ingeniería en Telemática y formación en seguridad de la información.</span><span id="rol" aria-hidden="true">Gerente de tienda</span><span class="caret" aria-hidden="true"></span></p>
+      <p class="lead reveal">Dirijo la operación diaria de una tienda AMPM mientras estudio Ingeniería en Telemática y me formo en seguridad de la información.</p>
+      <div class="cta reveal">
+        <a class="btn primary" href="#experiencia">Ver experiencia</a>
+        <a class="btn ghost" href="#contacto">Contactarme</a>
+      </div>
+    </div>
+    <div class="photo" role="img" aria-label="Espacio para la foto">Foto próximamente</div>
+  </header>
+
+  <section class="block" id="sobre-mi">
+    <div class="label">Sobre mí</div>
+    <div class="prose">
+      <h2>Del mostrador a la gerencia, con <span class="resalta">la tecnología como siguiente paso</span></h2>
+      <p>Me considero una persona abierta a nuevos desafíos y adaptable a nuevos entornos. Me gusta crear buenas relaciones de trabajo, comunicarme con claridad y ser eficiente y ético en cada puesto.</p>
+      <p>Empecé en atención al cliente y en dos años pasé por servicio al cliente e inventarios hasta llegar a gerente de tienda en AMPM. Al mismo tiempo estudio Ingeniería en Telemática en la UNAN-Managua y tengo formación en ciberseguridad y computación.</p>
+      <div class="cifras">
+        <div><strong>+2</strong><span>años en AMPM</span></div>
+        <div><strong>3</strong><span>puestos en AMPM, hasta gerente</span></div>
+        <div><strong>3</strong><span>apps creadas para la tienda</span></div>
+        <div><strong>5</strong><span>certificaciones</span></div>
+      </div>
+      <div class="grupos-hab">
+        <div class="grupo">
+          <p class="grupo-tit ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223%22%20y%3D%227%22%20width%3D%2218%22%20height%3D%2213%22%20rx%3D%222%22/%3E%3Cpath%20d%3D%22M8%207V5a2%202%200%200%201%202-2h4a2%202%200%200%201%202%202v2%22/%3E%3C/svg%3E');--c:var(--accent)">Gestión</p>
+          <ul class="skills"><li>Control de inventarios</li><li>Gestión de personal</li><li>Atención al cliente</li><li>Manejo de efectivo y caja</li></ul>
+        </div>
+        <div class="grupo">
+          <p class="grupo-tit ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223%22%20y%3D%224%22%20width%3D%2218%22%20height%3D%2212%22%20rx%3D%222%22/%3E%3Cpath%20d%3D%22M8%2020h8M12%2016v4%22/%3E%3C/svg%3E');--c:var(--accent)">Tecnología</p>
+          <ul class="skills"><li>Sistema RMH</li><li>Seguridad de la información</li><li>Ofimática</li><li>Desarrollo de apps</li></ul>
+        </div>
+        <div class="grupo">
+          <p class="grupo-tit ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M16%2021v-2a4%204%200%200%200-4-4H6a4%204%200%200%200-4%204v2%22/%3E%3Ccircle%20cx%3D%229%22%20cy%3D%227%22%20r%3D%224%22/%3E%3Cpath%20d%3D%22M22%2021v-2a4%204%200%200%200-3-3.9M16%203.1a4%204%200%200%201%200%207.8%22/%3E%3C/svg%3E');--c:var(--accent)">Personal</p>
+          <ul class="skills"><li>Puntualidad</li><li>Responsabilidad</li><li>Compañerismo</li><li>Español nativo</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="experiencia">
+    <div class="label">Experiencia</div>
+    <div>
+      <h2>Trayectoria</h2>
+      <ol class="timeline exp" reversed>
+        <li>
+          <div class="when">Jun 2026 – hoy<span class="actual">Actual</span></div>
+          <div class="exp-card">
+            <h3>Gerente de tienda</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18M5%2021V7l7-4%207%204v14M9%2021v-6h6v6%22/%3E%3C/svg%3E');--c:var(--muted)">AMPM S.A. · San Marcos, Carazo</p>
+            <ul class="chips"><li>Manejo de personal</li><li>Relación con proveedores</li><li>Actividades administrativas</li><li>Control de inventarios</li></ul>
+          </div>
+        </li>
+        <li>
+          <div class="when">Sep 2025 – Jun 2026</div>
+          <div class="exp-card">
+            <h3>Auxiliar de inventarios</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18M5%2021V7l7-4%207%204v14M9%2021v-6h6v6%22/%3E%3C/svg%3E');--c:var(--muted)">AMPM S.A. · San Marcos, Carazo</p>
+            <ul class="chips"><li>Manejo de inventarios con handheld y sistema RMH</li><li>Rotación de productos por método PEPS</li><li>Ingreso de facturas</li><li>Orientación a personal nuevo</li><li>Apertura y cierre de cajas</li><li>Depósitos bancarios</li></ul>
+          </div>
+        </li>
+        <li>
+          <div class="when">May 2024 – Sep 2025</div>
+          <div class="exp-card">
+            <h3>Agente de servicio al cliente (SAC)</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18M5%2021V7l7-4%207%204v14M9%2021v-6h6v6%22/%3E%3C/svg%3E');--c:var(--muted)">AMPM Nicaragua · Nindirí, Masaya</p>
+            <ul class="chips"><li>Atención al cliente</li><li>Transacciones bancarias</li><li>Apertura y cierre de caja</li><li>Manejo de efectivo</li><li>Relleno y limpieza de tienda</li></ul>
+          </div>
+        </li>
+        <li>
+          <div class="when">2023 – Feb 2024</div>
+          <div class="exp-card">
+            <h3>Atención al cliente</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18M5%2021V7l7-4%207%204v14M9%2021v-6h6v6%22/%3E%3C/svg%3E');--c:var(--muted)">Emprendimiento de comida rápida «Granitos de Oro» · Catarina, Masaya</p>
+          </div>
+        </li>
+        <li>
+          <div class="when">2022</div>
+          <div class="exp-card">
+            <h3>Prácticas profesionales</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2021h18M5%2021V7l7-4%207%204v14M9%2021v-6h6v6%22/%3E%3C/svg%3E');--c:var(--muted)">Hospital Cmdte. Hilario Sánchez Vázquez · Masaya</p>
+          </div>
+        </li>
+      </ol>
+
+      <h2 class="subtitulo"><span class="subtitulo-eti">Formación</span>Estudios y certificaciones</h2>
+      <ol class="timeline exp" reversed>
+        <li>
+          <div class="when">Feb 2026 – hoy<span class="actual">En curso</span></div>
+          <div class="exp-card">
+            <h3>Ingeniería en Telemática</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M22%2010%2012%205%202%2010l10%205%2010-5z%22/%3E%3Cpath%20d%3D%22M6%2012v5c3%202%209%202%2012%200v-5%22/%3E%3C/svg%3E');--c:var(--muted)">UNAN-Managua · Managua</p>
+          </div>
+        </li>
+        <li>
+          <div class="when">Oct – Dic 2024</div>
+          <div class="exp-card">
+            <h3>Análisis y gestión de riesgo en seguridad de la información</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M22%2010%2012%205%202%2010l10%205%2010-5z%22/%3E%3Cpath%20d%3D%22M6%2012v5c3%202%209%202%2012%200v-5%22/%3E%3C/svg%3E');--c:var(--muted)">INATEC, Centro Tecnológico Nacional · Masaya · 120 horas</p>
+            <p class="cert"><a href="certificados/inatec-riesgo-seguridad.jpg" target="_blank" rel="noopener" data-cert data-title="Análisis y gestión de riesgo en seguridad de la información">Ver certificado →</a></p>
+          </div>
+        </li>
+        <li>
+          <div class="when">Oct – Nov 2024</div>
+          <div class="exp-card">
+            <h3>Introduction to Cyber Security</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M22%2010%2012%205%202%2010l10%205%2010-5z%22/%3E%3Cpath%20d%3D%22M6%2012v5c3%202%209%202%2012%200v-5%22/%3E%3C/svg%3E');--c:var(--muted)">TryHackMe · en línea</p>
+            <p class="cert"><a href="certificados/tryhackme-cyber-security.jpg" target="_blank" rel="noopener" data-cert data-title="Introduction to Cyber Security">Ver certificado →</a> <a class="perfil" href="https://tryhackme.com/p/sud00" target="_blank" rel="noopener">Ver mi perfil en TryHackMe →</a></p>
+          </div>
+        </li>
+        <li>
+          <div class="when">Jul 2024</div>
+          <div class="exp-card">
+            <h3>Certificación Airpak Training</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M22%2010%2012%205%202%2010l10%205%2010-5z%22/%3E%3Cpath%20d%3D%22M6%2012v5c3%202%209%202%2012%200v-5%22/%3E%3C/svg%3E');--c:var(--muted)">Airpak Capacitación · en línea</p>
+            <p class="cert"><a href="certificados/airpak-training.jpg" target="_blank" rel="noopener" data-cert data-title="Certificación Airpak Training">Ver certificado →</a></p>
+          </div>
+        </li>
+        <li>
+          <div class="when">2022</div>
+          <div class="exp-card">
+            <h3>Técnico general en computación</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M22%2010%2012%205%202%2010l10%205%2010-5z%22/%3E%3Cpath%20d%3D%22M6%2012v5c3%202%209%202%2012%200v-5%22/%3E%3C/svg%3E');--c:var(--muted)">Centro Tecnológico Cmdte. Camilo Ortega Saavedra · Masaya</p>
+            <p class="cert"><a href="certificados/inatec-tecnico-computacion.jpg" target="_blank" rel="noopener" data-cert data-title="Técnico general en computación">Ver certificado →</a></p>
+          </div>
+        </li>
+        <li>
+          <div class="when">2022</div>
+          <div class="exp-card">
+            <h3>Sistemas operativos y ofimática</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M22%2010%2012%205%202%2010l10%205%2010-5z%22/%3E%3Cpath%20d%3D%22M6%2012v5c3%202%209%202%2012%200v-5%22/%3E%3C/svg%3E');--c:var(--muted)">Escuela de Oficios Isabel Robleto · Masaya</p>
+            <p class="cert"><a href="certificados/inatec-sistemas-ofimatica.jpg" target="_blank" rel="noopener" data-cert data-title="Sistemas operativos y ofimática">Ver certificado →</a></p>
+          </div>
+        </li>
+        <li>
+          <div class="when">2017 – 2021</div>
+          <div class="exp-card">
+            <h3>Bachillerato</h3>
+            <p class="where ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M22%2010%2012%205%202%2010l10%205%2010-5z%22/%3E%3Cpath%20d%3D%22M6%2012v5c3%202%209%202%2012%200v-5%22/%3E%3C/svg%3E');--c:var(--muted)">Instituto Nacional Héroes y Mártires de la Reforma (INHMARE) · Masaya</p>
+          </div>
+        </li>
+      </ol>
+      <p class="cv-link"><a class="btn ghost" href="#contacto">Pedir CV completo en PDF</a></p>
+    </div>
+  </section>
+
+  <section class="block" id="proyectos">
+    <div class="label">Proyectos</div>
+    <div>
+      <h2>Trabajo seleccionado</h2>
+      <p class="nota-proyectos">Los proyectos hechos para AMPM viven en repositorios privados; aquí describo qué hacen y cómo los construí, sin código ni datos de la empresa.</p>
+      <div class="filtros" role="group" aria-label="Filtrar proyectos">
+        <button type="button" class="filtro activo" data-filtro="todos" aria-pressed="true">Todos <span>5</span></button>
+        <button type="button" class="filtro" data-filtro="ampm" aria-pressed="false">Para AMPM <span>3</span></button>
+        <button type="button" class="filtro" data-filtro="personal" aria-pressed="false">Personales <span>2</span></button>
+      </div>
+      <div class="projects">
+        <article class="project destacado" data-cat="ampm">
+          <div class="p-info">
+          <div class="p-top"><span class="p-ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%227%22%20y%3D%222%22%20width%3D%2210%22%20height%3D%2220%22%20rx%3D%222%22/%3E%3Cpath%20d%3D%22M11%2018h2%22/%3E%3C/svg%3E')"></span><p class="badge"><span class="en-uso">En uso</span>Repositorio privado</p></div>
+          <h3>Inventario AMPM · app Android</h3>
+          <p>Convierte cualquier celular Android en el lector de inventario de la tienda: escanea con la cámara y trabaja directo sobre el sistema RMH.</p>
+          <details class="mas">
+            <summary>Ver detalles</summary>
+<ul class="duties dos-col">
+            <li>Conteo y toma física en vivo</li>
+            <li>Precios, ofertas y etiquetas</li>
+            <li>Compras y transferencias</li>
+            <li>Roles de agente y gerente</li>
+          </ul>
+          </details>
+          <div class="tags"><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/kotlin.svg');--c:#7F52FF">Kotlin</span><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/jetpackcompose.svg');--c:#4285F4">Jetpack Compose</span><span class="ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M14.5%204h-5L7%207H4a2%202%200%200%200-2%202v9a2%202%200%200%200%202%202h16a2%202%200%200%200%202-2V9a2%202%200%200%200-2-2h-3z%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2213%22%20r%3D%223.5%22/%3E%3C/svg%3E');--c:#3DDC84">CameraX + ML Kit</span><span class="ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cellipse%20cx%3D%2212%22%20cy%3D%225%22%20rx%3D%228%22%20ry%3D%223%22/%3E%3Cpath%20d%3D%22M4%205v14c0%201.7%203.6%203%208%203s8-1.3%208-3V5%22/%3E%3Cpath%20d%3D%22M4%2012c0%201.7%203.6%203%208%203s8-1.3%208-3%22/%3E%3C/svg%3E');--c:#E8473D">SQL Server</span><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/sqlite.svg');--c:#4AA8E0">Room</span><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/firebase.svg');--c:#FFCA28">Firebase</span></div>
+                  </div>
+          <div class="p-pantalla" aria-hidden="true">
+            <div class="p-tel">
+              <div class="p-tel-barra"></div>
+              <div class="p-mods">
+                <span style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%207V5a2%202%200%200%201%202-2h2M17%203h2a2%202%200%200%201%202%202v2M21%2017v2a2%202%200%200%201-2%202h-2M7%2021H5a2%202%200%200%201-2-2v-2M7%208v8M11%208v8M15%208v8M18%208v8%22/%3E%3C/svg%3E')">Conteo</span>
+                <span style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20.6%2013.4%2013.4%2020.6a2%202%200%200%201-2.8%200L3%2013V3h10l7.6%207.6a2%202%200%200%201%200%202.8z%22/%3E%3Cpath%20d%3D%22M7.5%207.5h.01%22/%3E%3C/svg%3E')">Precios</span>
+                <span style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%229%22%20cy%3D%2220%22%20r%3D%221.5%22/%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%2220%22%20r%3D%221.5%22/%3E%3Cpath%20d%3D%22M2%203h3l2.7%2012.4a2%202%200%200%200%202%201.6h8.6a2%202%200%200%200%202-1.6L22%207H6%22/%3E%3C/svg%3E')">Compras</span>
+                <span style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M1%204h14v12H1zM15%209h4l3%203v4h-7%22/%3E%3Ccircle%20cx%3D%225.5%22%20cy%3D%2218.5%22%20r%3D%221.5%22/%3E%3Ccircle%20cx%3D%2218.5%22%20cy%3D%2218.5%22%20r%3D%221.5%22/%3E%3C/svg%3E')">Transferencias</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="project destacado" data-cat="ampm">
+          <div class="p-info">
+          <div class="p-top"><span class="p-ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M21%2015a2%202%200%200%201-2%202H7l-4%204V5a2%202%200%200%201%202-2h14a2%202%200%200%201%202%202z%22/%3E%3Cpath%20d%3D%22M8%2010h.01M12%2010h.01M16%2010h.01%22/%3E%3C/svg%3E')"></span><p class="badge">Repositorio privado</p></div>
+          <h3>Juanito · asistente de IA por WhatsApp</h3>
+          <p>Bot que responde dudas del equipo en un grupo de WhatsApp sobre procesos, horarios y promociones, usando una base de conocimiento propia y, cuando ayuda, capturas de referencia.</p>
+          <details class="mas">
+            <summary>Ver detalles</summary>
+<ul class="duties">
+            <li>Panel web para administrar contactos, promociones, instrucciones y base de conocimiento.</li>
+            <li>Widget web de consultas y reporte de temas frecuentes.</li>
+            <li>Control de gasto mensual de la IA y acceso con contraseña y código por WhatsApp.</li>
+          </ul>
+          </details>
+          <div class="tags"><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/nodedotjs.svg');--c:#5FA04E">Node.js</span><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/express.svg');--c:currentColor">Express</span><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/claude.svg');--c:#D97757">API de Claude</span><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/whatsapp.svg');--c:#25D366">WhatsApp</span></div>
+          </div>
+          <div class="p-pantalla" aria-hidden="true">
+            <div class="p-tel p-chat">
+              <div class="p-tel-barra"></div>
+              <div class="p-chat-cab"><span class="p-chat-av"></span>Juanito</div>
+              <p class="burbuja yo">¿Cómo hago un cierre de caja?</p>
+              <p class="burbuja bot">Te explico paso a paso: primero…</p>
+              <p class="burbuja yo">¿Hay promociones hoy?</p>
+              <p class="burbuja bot escribiendo"><span></span><span></span><span></span></p>
+            </div>
+          </div>
+        </article>
+        <article class="project destacado" data-cat="ampm">
+          <div class="p-info">
+          <div class="p-top"><span class="p-ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223%22%20y%3D%224%22%20width%3D%2218%22%20height%3D%2218%22%20rx%3D%222%22/%3E%3Cpath%20d%3D%22M16%202v4M8%202v4M3%2010h18M8%2014h.01M12%2014h.01M16%2014h.01M8%2018h.01M12%2018h.01%22/%3E%3C/svg%3E')"></span><p class="badge">Repositorio privado</p></div>
+          <h3>Sistema de horarios AMPM</h3>
+          <p>Aplicación web para armar y publicar los horarios semanales del personal de tienda.</p>
+          <details class="mas">
+            <summary>Ver detalles</summary>
+<ul class="duties">
+            <li>Turnos por cargo, días libres y casos especiales como estudiantes.</li>
+            <li>Administración de personal y cuentas por tienda.</li>
+            <li>Exportación a Excel e historial de actividad.</li>
+            <li>Base de datos con reglas de seguridad y recuperación de contraseña.</li>
+          </ul>
+          </details>
+          <div class="tags"><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/html5.svg');--c:#E34F26">HTML</span><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/javascript.svg');--c:#F7DF1E">JavaScript</span><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/supabase.svg');--c:#3ECF8E">Supabase</span><span class="ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%2218%22%20height%3D%2218%22%20rx%3D%222%22/%3E%3Cpath%20d%3D%22M3%209h18M3%2015h18M9%203v18%22/%3E%3C/svg%3E');--c:#21A366">Excel</span></div>
+          </div>
+          <div class="p-pantalla" aria-hidden="true">
+            <div class="p-web">
+              <div class="p-web-barra"><i></i><i></i><i></i></div>
+              <div class="p-cal">
+                <b>L</b><b>M</b><b>M</b><b>J</b><b>V</b><b>S</b><b>D</b>
+                <span class="t1"></span><span class="t2"></span><span class="t1"></span><span class="libre"></span><span class="t3"></span><span class="t2"></span><span class="t1"></span>
+                <span class="t2"></span><span class="libre"></span><span class="t3"></span><span class="t1"></span><span class="t2"></span><span class="t1"></span><span class="libre"></span>
+                <span class="t3"></span><span class="t1"></span><span class="t2"></span><span class="t2"></span><span class="libre"></span><span class="t3"></span><span class="t2"></span>
+                <span class="t1"></span><span class="t3"></span><span class="libre"></span><span class="t1"></span><span class="t2"></span><span class="t1"></span><span class="t3"></span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="project destacado" data-cat="personal">
+          <div class="p-info">
+          <div class="p-top"><span class="p-ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%224%22%20y%3D%223%22%20width%3D%2216%22%20height%3D%2215%22%20rx%3D%222%22/%3E%3Cpath%20d%3D%22M4%2011h16M8%2018v3M16%2018v3M8%2014.5h.01M16%2014.5h.01%22/%3E%3C/svg%3E')"></span><p class="badge publico">Repositorio público</p></div>
+          <h3>Carrera de buses</h3>
+          <p>Juego de consola en Python: dos buses, UCA-Masaya contra UCA-Granada, avanzan al azar hasta la meta. Uno de mis primeros programas.</p>
+          <div class="tags"><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/python.svg');--c:#4B8BBE">Python</span></div>
+          <a class="more" href="https://github.com/Sud0-0/carrera_de_buses" target="_blank" rel="noopener">Ver en GitHub →</a>
+          </div>
+          <div class="p-pantalla" aria-hidden="true">
+            <div class="p-term">
+              <div class="p-web-barra"><i></i><i></i><i></i></div>
+              <p class="p-term-l">$ python carrera_de_buses.py</p>
+              <div class="carril"><span class="bus b1"><svg class="svg-bus" viewBox="0 0 120 44" aria-hidden="true"><rect x="2" y="4" width="112" height="30" rx="6" class="carroceria"/><rect x="8" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="22" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="36" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="50" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="64" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="78" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="92" y="8" width="9" height="22" rx="1.5" class="vidrio puerta"/><rect x="104" y="8" width="9" height="13" rx="2" class="vidrio"/><rect x="2" y="21" width="112" height="2.5" class="franja"/><rect x="112" y="26" width="4" height="4" rx="1" class="faro"/><text x="59" y="31" class="letrero">UCA-MASAYA</text><g class="rueda"><circle cx="24" cy="35" r="7" class="llanta"/><circle cx="24" cy="35" r="3" class="rin"/><path d="M24 29v12M18 35h12" class="rayo"/></g><g class="rueda"><circle cx="94" cy="35" r="7" class="llanta"/><circle cx="94" cy="35" r="3" class="rin"/><path d="M94 29v12M88 35h12" class="rayo"/></g></svg></span></div>
+              <div class="carril"><span class="bus b2"><svg class="svg-bus" viewBox="0 0 120 44" aria-hidden="true"><rect x="2" y="4" width="112" height="30" rx="6" class="carroceria"/><rect x="8" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="22" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="36" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="50" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="64" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="78" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="92" y="8" width="9" height="22" rx="1.5" class="vidrio puerta"/><rect x="104" y="8" width="9" height="13" rx="2" class="vidrio"/><rect x="2" y="21" width="112" height="2.5" class="franja"/><rect x="112" y="26" width="4" height="4" rx="1" class="faro"/><text x="59" y="31" class="letrero">UCA-GRANADA</text><g class="rueda"><circle cx="24" cy="35" r="7" class="llanta"/><circle cx="24" cy="35" r="3" class="rin"/><path d="M24 29v12M18 35h12" class="rayo"/></g><g class="rueda"><circle cx="94" cy="35" r="7" class="llanta"/><circle cx="94" cy="35" r="3" class="rin"/><path d="M94 29v12M88 35h12" class="rayo"/></g></svg></span></div>
+              <p class="p-term-l meta">🏁 meta</p>
+            </div>
+          </div>
+        </article>
+        <article class="project destacado" data-cat="personal">
+          <div class="p-info">
+          <div class="p-top"><span class="p-ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%222%22%20y%3D%224%22%20width%3D%2220%22%20height%3D%2216%22%20rx%3D%222%22/%3E%3Cpath%20d%3D%22M2%209h20M6%206.5h.01M9%206.5h.01%22/%3E%3C/svg%3E')"></span><p class="badge publico">Sitio personal</p></div>
+          <h3>Este portafolio</h3>
+          <p>Sitio personal en HTML y CSS, diseñado para leerse bien en celular y computadora.</p>
+          <div class="tags"><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/html5.svg');--c:#E34F26">HTML</span><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/css3.svg');--c:#2965F1">CSS</span></div>
+          </div>
+          <div class="p-pantalla" aria-hidden="true">
+            <div class="p-web p-mini">
+              <div class="p-web-barra"><i></i><i></i><i></i></div>
+              <div class="p-mini-hero"><span class="l1"></span><span class="l2"></span><span class="l3"></span></div>
+              <div class="p-mini-cards"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contacto">
+    <div class="label">Contacto</div>
+    <div>
+      <h2>Hablemos</h2>
+      <dl class="contact">
+        <div><dt><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/gmail.svg');--c:#EA4335">Correo</span></dt><dd><a href="mailto:mmarcosalejandro55@gmail.com">mmarcosalejandro55@gmail.com</a></dd></div>
+        <div><dt><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/whatsapp.svg');--c:#25D366">WhatsApp</span></dt><dd><a href="https://wa.me/50576597310" target="_blank" rel="noopener">Enviar mensaje por WhatsApp →</a></dd></div>
+        <div><dt><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/github.svg');--c:currentColor">GitHub</span></dt><dd><a href="https://github.com/Sud0-0" target="_blank" rel="noopener">github.com/Sud0-0</a></dd></div>
+        <div><dt><span class="ico" style="--i:url('https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/tryhackme.svg');--c:#C11111">TryHackMe</span></dt><dd><a href="https://tryhackme.com/p/sud00" target="_blank" rel="noopener">tryhackme.com/p/sud00</a></dd></div>
+        <div><dt><span class="ico" style="--i:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%2010c0%206-8%2012-8%2012S4%2016%204%2010a8%208%200%200%201%2016%200z%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2210%22%20r%3D%223%22/%3E%3C/svg%3E');--c:#5CC3B8">Ubicación</span></dt><dd>Masaya, Nicaragua</dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<dialog class="juego" id="juego" aria-labelledby="juego-titulo">
+  <div class="juego-caja">
+    <div class="juego-cab">
+      <div>
+        <p class="juego-eti">Minijuego</p>
+        <h2 id="juego-titulo">Carrera de buses</h2>
+      </div>
+      <button type="button" class="juego-cerrar" id="cerrar-juego" aria-label="Cerrar juego">✕</button>
+    </div>
+    <p class="juego-txt">Mi primer programa en Python, ahora jugable. Tú manejas el bus de <strong>UCA-Masaya</strong>: toca el botón (o la barra espaciadora) lo más rápido que puedas para ganarle a UCA-Granada.</p>
+    <div class="pista">
+      <div class="carril-j"><span class="bus-j tuyo" id="bus-tuyo" aria-label="Bus UCA-Masaya"><svg class="svg-bus" viewBox="0 0 120 44" aria-hidden="true"><rect x="2" y="4" width="112" height="30" rx="6" class="carroceria"/><rect x="8" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="22" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="36" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="50" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="64" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="78" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="92" y="8" width="9" height="22" rx="1.5" class="vidrio puerta"/><rect x="104" y="8" width="9" height="13" rx="2" class="vidrio"/><rect x="2" y="21" width="112" height="2.5" class="franja"/><rect x="112" y="26" width="4" height="4" rx="1" class="faro"/><text x="59" y="31" class="letrero">UCA-MASAYA</text><g class="rueda"><circle cx="24" cy="35" r="7" class="llanta"/><circle cx="24" cy="35" r="3" class="rin"/><path d="M24 29v12M18 35h12" class="rayo"/></g><g class="rueda"><circle cx="94" cy="35" r="7" class="llanta"/><circle cx="94" cy="35" r="3" class="rin"/><path d="M94 29v12M88 35h12" class="rayo"/></g></svg></span></div>
+      <div class="carril-j"><span class="bus-j rival" id="bus-rival" aria-label="Bus UCA-Granada"><svg class="svg-bus" viewBox="0 0 120 44" aria-hidden="true"><rect x="2" y="4" width="112" height="30" rx="6" class="carroceria"/><rect x="8" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="22" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="36" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="50" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="64" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="78" y="8" width="11" height="10" rx="2" class="vidrio"/><rect x="92" y="8" width="9" height="22" rx="1.5" class="vidrio puerta"/><rect x="104" y="8" width="9" height="13" rx="2" class="vidrio"/><rect x="2" y="21" width="112" height="2.5" class="franja"/><rect x="112" y="26" width="4" height="4" rx="1" class="faro"/><text x="59" y="31" class="letrero">UCA-GRANADA</text><g class="rueda"><circle cx="24" cy="35" r="7" class="llanta"/><circle cx="24" cy="35" r="3" class="rin"/><path d="M24 29v12M18 35h12" class="rayo"/></g><g class="rueda"><circle cx="94" cy="35" r="7" class="llanta"/><circle cx="94" cy="35" r="3" class="rin"/><path d="M94 29v12M88 35h12" class="rayo"/></g></svg></span></div>
+      <span class="meta-j" aria-hidden="true"></span>
+    </div>
+    <p class="juego-estado" id="juego-estado" aria-live="polite">¿Listo? Presiona «Empezar».</p>
+    <div class="juego-acciones">
+      <button type="button" class="btn primary" id="juego-empezar">Empezar</button>
+      <button type="button" class="acelerar" id="juego-acelerar" disabled>¡Acelera!</button>
+    </div>
+    <p class="juego-record" id="juego-record"></p>
+  </div>
+</dialog>
+
+<footer>
+  <div class="wrap">© 2026 Marcos Alejandro Membreño López</div>
+</footer>
+
+<dialog class="visor" id="visor" aria-label="Certificado">
+  <figure>
+    <div class="bar"><span id="visor-titulo"></span><button type="button" id="visor-cerrar">Cerrar</button></div>
+    <img id="visor-img" alt="">
+  </figure>
+</dialog>
+<script>
+(function () {
+  var d = document.getElementById("visor");
+  if (!d || typeof d.showModal !== "function") return;
+  var img = document.getElementById("visor-img"), titulo = document.getElementById("visor-titulo");
+  document.querySelectorAll("a[data-cert]").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      img.src = a.getAttribute("href");
+      img.alt = "Certificado: " + a.dataset.title;
+      titulo.textContent = a.dataset.title;
+      d.showModal();
+    });
+  });
+  document.getElementById("visor-cerrar").addEventListener("click", function () { d.close(); });
+  d.addEventListener("click", function (e) { if (e.target === d) d.close(); });
+})();
+</script>
+<script>
+(function () {
+  var el = document.getElementById("rol");
+  if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var roles = ["Gerente de tienda", "Estudiante de Telemática", "Seguridad de la información", "Control de inventarios"];
+  var i = 0, n = roles[0].length, borrando = true;
+  function paso() {
+    var r = roles[i];
+    if (borrando) {
+      n--;
+      el.textContent = r.slice(0, n);
+      if (n === 0) { borrando = false; i = (i + 1) % roles.length; return setTimeout(paso, 250); }
+      return setTimeout(paso, 30);
+    }
+    n++;
+    el.textContent = roles[i].slice(0, n);
+    if (n === roles[i].length) { borrando = true; return setTimeout(paso, 1800); }
+    setTimeout(paso, 65);
+  }
+  setTimeout(paso, 2200);
+})();
+</script>
+<script>
+(function () {
+  var reducir = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var barra = document.querySelector(".progreso");
+  var enlaces = [].slice.call(document.querySelectorAll('nav.top ul a[href^="#"]'));
+  var secciones = enlaces.map(function (a) { return document.querySelector(a.getAttribute("href")); }).filter(Boolean);
+  function alDesplazar() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    if (barra) barra.style.transform = "scaleX(" + (max > 0 ? h.scrollTop / max : 0) + ")";
+    var actual = null;
+    secciones.forEach(function (s) { if (s.getBoundingClientRect().top < window.innerHeight * 0.35) actual = s; });
+    enlaces.forEach(function (a) { a.classList.toggle("activo", !!actual && a.getAttribute("href") === "#" + actual.id); });
+  }
+  var pendientes = [];
+  if (!reducir) {
+    pendientes = [].slice.call(document.querySelectorAll("section.block, .project, .timeline > li"));
+    pendientes.forEach(function (el) { el.classList.add("revela"); });
+  }
+  function revelar() {
+    pendientes = pendientes.filter(function (el) {
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.92) { el.classList.add("visible"); return false; }
+      return true;
+    });
+  }
+  function alMover() { alDesplazar(); revelar(); }
+  window.addEventListener("scroll", alMover, { passive: true });
+  window.addEventListener("resize", alMover);
+  alMover();
+})();
+</script>
+<script>
+(function () {
+  var botones = [].slice.call(document.querySelectorAll(".filtro"));
+  var tarjetas = [].slice.call(document.querySelectorAll(".projects .project"));
+  botones.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var f = b.dataset.filtro;
+      botones.forEach(function (x) { x.classList.toggle("activo", x === b); x.setAttribute("aria-pressed", x === b); });
+      tarjetas.forEach(function (t) {
+        var ver = f === "todos" || t.dataset.cat === f;
+        t.classList.toggle("oculto", !ver);
+        t.classList.remove("aparece-filtro");
+        if (ver) { void t.offsetWidth; t.classList.add("aparece-filtro", "visible"); }
+      });
+    });
+  });
+})();
+</script>
+<script>
+(function () {
+  var d = document.getElementById("juego");
+  if (!d || typeof d.showModal !== "function") return;
+  var abrir = document.getElementById("abrir-juego"), cerrar = document.getElementById("cerrar-juego");
+  var empezar = document.getElementById("juego-empezar"), acelerar = document.getElementById("juego-acelerar");
+  var estado = document.getElementById("juego-estado"), recordTxt = document.getElementById("juego-record");
+  var tuyo = document.getElementById("bus-tuyo"), rival = document.getElementById("bus-rival");
+  var xt = 0, xr = 0, corriendo = false, inicio = 0, reloj = null, timers = [];
+  var CLAVE = "carrera-buses-record";
+
+  function leerRecord() { try { return parseFloat(localStorage.getItem(CLAVE)) || 0; } catch (e) { return 0; } }
+  function guardarRecord(t) { try { localStorage.setItem(CLAVE, String(t)); } catch (e) {} }
+  function mostrarRecord() { var r = leerRecord(); recordTxt.textContent = r ? "Tu mejor tiempo: " + r.toFixed(2) + " s" : ""; }
+  function pintar() { tuyo.style.setProperty("--x", xt); rival.style.setProperty("--x", xr); }
+  var pista = document.querySelector(".pista");
+  function limpiar() { clearInterval(reloj); timers.forEach(clearTimeout); timers = []; corriendo = false; acelerar.disabled = true; pista.classList.remove("corriendo"); }
+  function reiniciar() { limpiar(); xt = 0; xr = 0; pintar(); estado.textContent = "¿Listo? Presiona «Empezar»."; empezar.textContent = "Empezar"; empezar.disabled = false; mostrarRecord(); }
+
+  function terminar(gane) {
+    limpiar();
+    var t = (performance.now() - inicio) / 1000;
+    if (gane) {
+      var r = leerRecord(), nuevo = !r || t < r;
+      if (nuevo) guardarRecord(t);
+      estado.textContent = "🏆 ¡Ganaste en " + t.toFixed(2) + " s!" + (nuevo ? " Nuevo récord" : "");
+    } else {
+      estado.textContent = "😅 Ganó UCA-Granada. ¡Inténtalo otra vez!";
+    }
+    mostrarRecord();
+    empezar.textContent = "Jugar de nuevo";
+    empezar.disabled = false;
+  }
+
+  function arrancar() {
+    reiniciar();
+    empezar.disabled = true;
+    ["3", "2", "1"].forEach(function (n, i) { timers.push(setTimeout(function () { estado.textContent = n + "…"; }, i * 650)); });
+    timers.push(setTimeout(function () {
+      estado.textContent = "¡Ya! 🚦";
+      corriendo = true;
+      pista.classList.add("corriendo");
+      acelerar.disabled = false;
+      acelerar.focus();
+      inicio = performance.now();
+      reloj = setInterval(function () {
+        xr = Math.min(100, xr + 0.35 + Math.random() * 0.75);
+        pintar();
+        if (xr >= 100) terminar(false);
+      }, 100);
+    }, 3 * 650));
+  }
+
+  function avanzar() {
+    if (!corriendo) return;
+    xt = Math.min(100, xt + 1.9);
+    pintar();
+    if (xt >= 100) terminar(true);
+  }
+
+  abrir.addEventListener("click", function () { reiniciar(); d.showModal(); });
+  cerrar.addEventListener("click", function () { d.close(); });
+  d.addEventListener("close", limpiar);
+  d.addEventListener("click", function (e) { if (e.target === d) d.close(); });
+  empezar.addEventListener("click", arrancar);
+  acelerar.addEventListener("pointerdown", function (e) { e.preventDefault(); avanzar(); });
+  acelerar.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); avanzar(); } });
+  d.addEventListener("keydown", function (e) { if (e.code === "Space" && corriendo) { e.preventDefault(); if (!e.repeat) avanzar(); } });
+})();
+</script>
+<script>
+(function () {
+  var nav = document.querySelector("nav.top"), btn = document.getElementById("menu-btn");
+  if (!nav || !btn) return;
+  function poner(abierto) {
+    nav.classList.toggle("abierto", abierto);
+    btn.setAttribute("aria-expanded", abierto);
+    btn.setAttribute("aria-label", abierto ? "Cerrar menú" : "Abrir menú");
+  }
+  btn.addEventListener("click", function () { poner(!nav.classList.contains("abierto")); });
+  nav.querySelectorAll("ul.menu a").forEach(function (a) { a.addEventListener("click", function () { poner(false); }); });
+  document.addEventListener("click", function (e) { if (!nav.contains(e.target)) poner(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") poner(false); });
+})();
+</script>
+</body>
+</html>
