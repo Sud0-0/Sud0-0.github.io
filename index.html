@@ -861,6 +861,7 @@ nav.top .jugar-btn { flex: none; padding: .5rem 1rem; font-size: .9rem; box-shad
     if (barra) barra.style.transform = "scaleX(" + (max > 0 ? h.scrollTop / max : 0) + ")";
     var actual = null;
     secciones.forEach(function (s) { if (s.getBoundingClientRect().top < window.innerHeight * 0.35) actual = s; });
+    if (max > 0 && h.scrollTop >= max - 2) actual = secciones[secciones.length - 1];
     enlaces.forEach(function (a) { a.classList.toggle("activo", !!actual && a.getAttribute("href") === "#" + actual.id); });
   }
   var pendientes = [];
